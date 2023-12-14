@@ -1,12 +1,14 @@
 import { useState } from "react";
-import {
-    signInWithGooglePopup,
-    signInAuthUserWithEmailAndPassword,
-} from "../../utils/firebase/firebase.utils";
+import { useDispatch } from "react-redux";
+
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
 import { SignInContainer, Buttons } from "./sign-in-form.styles.jsx";
+import {
+    googleSignInStart,
+    emailSignInStart,
+} from "../../store/user/user.action.js";
 
 const defaultFormField = {
     email: "",
@@ -15,6 +17,7 @@ const defaultFormField = {
 
 export default function SignInForm() {
     const [formFields, setFormFields] = useState(defaultFormField);
+    const dispatch = useDispatch();
 
     const { email, password } = formFields;
 
@@ -34,10 +37,7 @@ export default function SignInForm() {
         event.preventDefault();
 
         try {
-            const { user } = await signInAuthUserWithEmailAndPassword(
-                email,
-                password
-            );
+            dispatch(emailSignInStart(email, password));
             resetFormFields();
         } catch (error) {
             switch (error.code) {
@@ -54,7 +54,7 @@ export default function SignInForm() {
     };
 
     const signInWithGoogle = async () => {
-        await signInWithGooglePopup();
+        dispatch(googleSignInStart());
     };
 
     return (
