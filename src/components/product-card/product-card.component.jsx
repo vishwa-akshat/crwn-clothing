@@ -1,43 +1,37 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { BUTTON_TYPE_CLASSES } from "../button/button.component.jsx";
+import { addItemToCart } from "../../store/cart/cart.reducer";
 
-import { addItemToCart } from "../../store/cart/cart.action.js";
-
-import { selectCartItems } from "../../store/cart/cart.selector.js";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
 import {
-    ProductCardContainer,
-    ProductCardImage,
+    ProductCartContainer,
     Footer,
-    CardButton,
-    FooterName,
-    FooterPrice,
-} from "./product-card.styles.jsx";
+    Name,
+    Price,
+} from "./product-card.styles";
 
-export default function ProductCard({ product }) {
-    const dispatch = useDispatch();
-    const cartItems = useSelector(selectCartItems);
+const ProductCard = ({ product }) => {
     const { name, price, imageUrl } = product;
+    const dispatch = useDispatch();
 
-    const addProductToCart = () => {
-        dispatch(addItemToCart(cartItems, product));
-    };
+    const addProductToCart = () => dispatch(addItemToCart(product));
 
     return (
-        <ProductCardContainer>
-            <ProductCardImage src={imageUrl} alt={`${name}`} />
+        <ProductCartContainer>
+            <img src={imageUrl} alt={`${name}`} />
             <Footer>
-                <FooterName>{name}</FooterName>
-                <FooterPrice>$ {price}</FooterPrice>
+                <Name>{name}</Name>
+                <Price>{price}</Price>
             </Footer>
-            <CardButton
-                onClick={addProductToCart}
+            <Button
                 buttonType={BUTTON_TYPE_CLASSES.inverted}
+                onClick={addProductToCart}
             >
-                Add to cart
-            </CardButton>
-        </ProductCardContainer>
+                Add to card
+            </Button>
+        </ProductCartContainer>
     );
-}
+};
+
+export default ProductCard;
